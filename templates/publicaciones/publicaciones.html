@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+
+
+{% block contenido %}
+
+<div class="post-container">
+
+    <form action="" method="get">
+
+        <select name="categoria" id="">
+
+                <option value="">Todas</option>
+            {% for categoria in categorias  %}
+                <option value="{{categoria.id}}">{{categoria.nombre}}</option>
+            {% endfor %}
+                
+        </select>
+
+        <select name="orderby" id="">
+            <option value="">Ordenar por</option>
+            <option value="fecha_asc">Fecha ascendente</option>
+            <option value="fecha_desc">Fecha descendente</option>
+            <option value="alf_asc">Alfabeticamente ascendente</option>
+            <option value="alf_desc">Alfabeticamente descendente</option>
+        
+        </select>
+
+
+
+        <button type="submit">Filtrar</button>
+    </form>
+
+
+
+
+
+
+
+    <h2>TODAS MIS PUBLICACIONES</h2>
+
+    {% for post in posteos %}
+    <div class="card m-5">
+        <div class="card-header">
+            {{ post.fecha }}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ post.titulo }}</h5>
+            <p class="card-text">{{ post.post }}</p>
+            <p class="card-text">{{ post.categoria }}</p>
+            <p class="card-text">{{ post.creador }}</p>
+            <a href="{% url 'publicaciones:detalle-post' post.id %}" class="custom-button">Indagar en profundidad</a>
+
+
+
+
+            {% if user.is_superuser or user == post.creador %}
+            <a href="{% url 'publicaciones:editar-post' post.id %}" class="custom-button">Editar</a>
+            <a href="{% url 'publicaciones:eliminar-post' post.id %}" class="custom-button">Eliminar posteo</a>
+            {% endif %}
+
+
+
+
+
+
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+
+{% if user.is_authenticated %}
+<a href="{% url 'publicaciones:postear' %}" class="custom-button">Postear algo nuevo!</a>
+{% endif %}
+
+
+
+
+{% endblock contenido %}
